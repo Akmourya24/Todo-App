@@ -21,33 +21,6 @@ const FilterComponent = ({ setCategory }) => {
                 <option value="Relationship">Relationship</option>
                 <option value="Social Life">Social Life</option>
             </select>
-            {/* Right - Filter Button */}
-            <div className="relative">
-                <button
-                    className="flex items-center px-4 py-2 bg-gray-200 text-gray-600 rounded-md shadow hover:bg-gray-300 transition"
-                    onClick={() => setShowDropdown(!showDropdown)}
-                >
-                    <span className="mr-2">&#x25BC; Filter</span>
-                </button>
-
-                {/* Dropdown List */}
-                {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-10">
-                        {["Future Goal", "Education", "Finance", "Relationship", "Social Life"].map((category, index) => (
-                            <div
-                                key={index}
-                                className="p-2 text-lg text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer"
-                                onClick={() => {
-                                    setCategory(category);
-                                    setShowDropdown(false);
-                                }}
-                            >
-                                {category}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
         </div>
     );
 };
@@ -59,7 +32,6 @@ const App = () => {
     const [notification, setNotification] = useState(null);
     const [numberOftask, setNumberOftask] = useState(0);
     const [displayTask, setDisplayTask] = useState('')
-    // const [hiddenTask, setHiddenTask] = useState('')
     const taskvalue = (e) => {
         setTask(e.target.value);
     };
@@ -80,18 +52,17 @@ const App = () => {
         setNotification(massage);
         setTimeout(() => {
             setNotification(null);
-
         }, 2000);
     }
 
     const addTask = () => {
         let newdate = new Date();
-        newdate.getDate();
+        let mydate = newdate.toLocaleDateString("en-US")
         setNumberOftask(numberOftask + 1);
         if (task.trim() === "") {
             alert("Enter your todo");
         } else {
-            setTodo([...todo, { SrNo: numberOftask, task, type: category, Date: newdate, completed: false }]);
+            setTodo([...todo, { SrNo: numberOftask, task, type: category, Date: mydate, completed: false }]);
             setTask('');
             console.log(todo)
             getNotification("Task added successfully ✅!");
@@ -110,7 +81,6 @@ const App = () => {
     };
     const hiddeTask = () => {
         setDisplayTask('hidden')
-        // setHiddenTask('block')    
     }
     const showTask = () => {
         setDisplayTask('block')
@@ -118,10 +88,8 @@ const App = () => {
     return (
         <Router>
             <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex flex-col items-center py-10">
-                <Navbar hiddeTask={hiddeTask} showTask={showTask}/>
-                <Routes>
-                    <Route path="/task" element={<Task todo={todo} />} />
-                </Routes>
+                <Navbar hiddeTask={hiddeTask} showTask={showTask} />
+
                 {notification && (
                     <div className="fixed text-xl w-1/3 top-5 right-5 bg-green-400 text-white px-4 py-2 rounded-lg shadow-lg">
                         {notification}
@@ -145,7 +113,6 @@ const App = () => {
                         </button>
                     </div>
                     <FilterComponent setCategory={setCategory} />
-
                     <div className="mt-8 space-y-4">
                         {todo.map((item, index) => (
                             <div key={index} className="flex items-center justify-between ml-12 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition duration-300">
@@ -168,9 +135,12 @@ const App = () => {
                                 </div>
                             </div>
                         ))}
-
+                        <button>All Task</button>
                     </div>
                 </div>
+                <Routes>
+                    <Route path="/task" element={<Task todo={todo} setCategory={setCategory} />} />
+                </Routes>
             </div>
         </Router>
     );
