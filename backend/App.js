@@ -1,11 +1,17 @@
 import express from "express";
+import cors from "cors";
+
 
 const app = express();
 
-app.use("/hello",(req, res) =>{
-    res.send("Hello World");
-});
+app.use(cors(
+    {
+        origin: process.env.CORS_ORIGIN,
+        credentials: true
+    }
+));
 
-app.listen(3000, () =>{
-console.log("Server is running on port 3000");
-})
+import  userRouter from "express";
+app.use("/api/todo", userRouter);
+
+export { app };
