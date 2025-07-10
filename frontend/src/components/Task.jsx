@@ -1,10 +1,31 @@
-import React, { useState } from "react";
+import axios from "axios";
+import  {useEffect,useState } from "react";
 
 const Task = ({ todo }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [filterCategory, setFilterCategory] = useState("Future Goal");
 
     const filteredTodo = filterCategory === "Future Goal" ? todo : todo.filter(task => task.type === filterCategory);
+
+        // Fetch todos from backend on component mount
+        useEffect(() => {
+            fetchTodos();
+        }, []);
+
+        const fetchTodos = async () => {
+            try {
+                const response = await axios.get('/api/getAll');
+                if (response.status !== 200) {
+                    throw new Error("Failed to fetch todos");
+                }
+                if (response.data && response.data.todos) {
+                    setTodo(response.data.todos);
+                }
+                console.log("Todos fetched successfully:", response.data.todos);
+            } catch (error) {
+            console.error("Error fetching todos:", error);
+        }
+    };
 
     return (
         <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">

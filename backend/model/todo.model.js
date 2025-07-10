@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const todoSchema = new mongoose.Schema({
-    name:{
+    task:{
         type:String,
         required:true,
         trim:true,
@@ -13,15 +13,15 @@ const todoSchema = new mongoose.Schema({
         default:false,
 
     },
-    data:{
+    Date:{
         type:Date,
         default:Date.now,
 
     },
     category:{
         type:String,
-        enum:["future goal","work","personal","other"],
-        default:"future goal",
+        enum:["Future Goal","Education","Finance","Relationship","Work","Health","Travel","Social Life","Other"],
+        default:"Future Goal",
     }
 
 },
